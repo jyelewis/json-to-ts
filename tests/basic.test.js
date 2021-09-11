@@ -5,8 +5,23 @@ describe("json-to-js", () => {
         await expect(jsonToTs("Hello")).resolves.toEqual(`export type JsonData = string;`.trim());
     });
 
+    it("Single with backslashes", async () => {
+        await expect(jsonToTs("Hello \"mate\"")).resolves.toEqual(`export type JsonData = string;`.trim());
+    });
+
     it("Single number", async () => {
         await expect(jsonToTs(123)).resolves.toEqual(`export type JsonData = number;`.trim());
+    });
+
+
+    it("Single decimal number", async () => {
+        await expect(jsonToTs(123.45)).resolves.toEqual(`export type JsonData = number;`.trim());
+    });
+
+    it("Single decimal as object property", async () => {
+        await expect(jsonToTs({ myNum: 123.45 })).resolves.toEqual(`export type JsonData = {
+  myNum: number;
+};`.trim());
     });
 
     it("Single boolean (true)", async () => {

@@ -84,6 +84,10 @@ char *json_to_string_type(char *json, ts_type *type) {
 
     // move forward until we reach the end of the string
     while (json[0] != '"') {
+        if (json[0] == '\\') {
+            // skip the next character due to backslash escape
+            json++;
+        }
         json++;
     }
 
@@ -97,7 +101,8 @@ char *json_to_number_type(char *json, ts_type *type) {
     type->possible_types = PT_NUMBER;
 
     // move forward until we reach the end of the number
-    while (json[0] >= '0' && json[0] <= '9') {
+    // allow decimals in numbers
+    while ((json[0] >= '0' && json[0] <= '9') || json[0] == '.') {
         json++;
     }
 
