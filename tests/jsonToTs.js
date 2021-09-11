@@ -2,7 +2,7 @@ const childProcess = require("child_process");
 
 exports.jsonToTs = async function jsonToTs(obj) {
     const json = JSON.stringify(obj);
-    const child = childProcess.exec("../cmake-build-debug/json_to_ts", {
+    const child = childProcess.exec("../build-release/json_to_ts", {
         cwd: __dirname
     });
 
