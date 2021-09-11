@@ -29,8 +29,36 @@ export type JsonData = {
         `.trim());
     });
 
+    it("Empty object", async () => {
+        await expect(jsonToTs({})).resolves.toEqual(`
+export type JsonData = {};
+        `.trim());
+    });
+
+    it("Empty object in object", async () => {
+        await expect(jsonToTs({ emptyObj: {} })).resolves.toEqual(`
+export type JsonData = {
+  emptyObj: {};
+};
+        `.trim());
+    });
+
     it("Simple array", async () => {
         await expect(jsonToTs([1, 2, 3])).resolves.toEqual(`export type JsonData = number[];`.trim());
+    });
+
+    it("Empty array", async () => {
+        await expect(jsonToTs([])).resolves.toEqual(`
+export type JsonData = [];
+        `.trim());
+    });
+
+    it("Empty array in object", async () => {
+        await expect(jsonToTs({ emptyArr: [] })).resolves.toEqual(`
+export type JsonData = {
+  emptyArr: [];
+};
+        `.trim());
     });
 
     it("Array of different types", async () => {
@@ -134,6 +162,51 @@ export type JsonData = Array<{
         `.trim());
     });
 
+    it("2D Array", async () => {
+        const obj = [
+            [1, 2, 3],
+            [4, 5, 6]
+        ];
+
+        await expect(jsonToTs(obj)).resolves.toEqual(`
+export type JsonData = number[][];
+        `.trim());
+    });
+
+    it("3D Array", async () => {
+        const obj = [
+            [[1, 2], [3, 4], [5, 6]],
+            [[7, 8], [9, 10], [11, 12]]
+        ];
+
+        await expect(jsonToTs(obj)).resolves.toEqual(`
+export type JsonData = number[][][];
+        `.trim());
+    });
+
+    it("3D Array with mixed types", async () => {
+        const obj = [
+            [[1, false], [3, "hi"], []],
+            [[7, 8], [null, true], [11, 12]]
+        ];
+
+        await expect(jsonToTs(obj)).resolves.toEqual(`
+export type JsonData = Array<null | boolean | number | string>[][];
+        `.trim());
+    });
+
+    it("3D Array with mixed types and mixed depths", async () => {
+        const obj = [
+            [[1, false], [3, "hi"], [], 1],
+            5,
+            [[7, 8], [null, true], [11, 12]]
+        ];
+
+        await expect(jsonToTs(obj)).resolves.toEqual(`
+export type JsonData = Array<number | Array<number | Array<null | boolean | number | string>>>;
+        `.trim());
+    });
+
     it("Example API data 1", async () => {
         const obj = {
             "glossary": {
@@ -180,6 +253,72 @@ export type JsonData = {
       };
     };
   };
+};
+        `.trim());
+    });
+
+    it("Example API data 2", async () => {
+        const obj = {
+            pagination: {
+                results: 152,
+                limit: 2,
+                skipped: 0
+            },
+            users: [
+                {
+                    firstName: "John",
+                    lastName: "Smith",
+                    profileImage: "https://picsum.photos/200",
+                    recentLogins: [1631391272, 1631393555],
+                    premiumUser: false,
+                    favouriteProperties: [
+                        {
+                            address: "123 fake street",
+                            suburb: "Springfield",
+                            country: "USA",
+                            rating: 5
+                        }
+                    ]
+                },
+                {
+                    firstName: "Jane",
+                    lastName: "Doe",
+                    profileImage: null,
+                    premiumUser: true,
+                    favouriteProperties: [
+                        {
+                            address: "456 second avenue",
+                            suburb: "Columbus",
+                            state: "OH",
+                            country: "USA",
+                            rating: 4
+                        }
+                    ]
+                }
+            ]
+        };
+
+        await expect(jsonToTs(obj)).resolves.toEqual(`
+export type JsonData = {
+  pagination: {
+    results: number;
+    limit: number;
+    skipped: number;
+  };
+  users: Array<{
+    firstName: string;
+    lastName: string;
+    profileImage: null | string;
+    recentLogins?: number[];
+    premiumUser: boolean;
+    favouriteProperties: Array<{
+      address: string;
+      suburb: string;
+      country: string;
+      rating: number;
+      state?: string;
+    }>;
+  }>;
 };
         `.trim());
     });
