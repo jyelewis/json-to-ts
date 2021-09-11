@@ -9,53 +9,78 @@ Purpose
 Converts JSON
 ```json
 {
-    "glossary": {
-        "title": "example glossary",
-        "GlossDiv": {
-            "title": "S",
-            "GlossList": {
-                "GlossEntry": {
-                    "ID": "SGML",
-                    "SortAs": "SGML",
-                    "GlossTerm": "Standard Generalized Markup Language",
-                    "Acronym": "SGML",
-                    "Abbrev": "ISO 8879:1986",
-                    "GlossDef": {
-                        "para": "A meta-markup language, used to create markup languages such as DocBook.",
-                        "GlossSeeAlso": ["GML", "XML"]
-                    },
-                    "GlossSee": "markup"
-                }
-            }
+  "pagination": {
+    "results": 152,
+    "limit": 2,
+    "skipped": 0
+  },
+  "users": [
+    {
+      "firstName": "John",
+      "lastName": "Smith",
+      "profileImage": "https://picsum.photos/200",
+      "recentLogins": [
+        1631391272,
+        1631393555
+      ],
+      "premiumUser": false,
+      "favouriteProperties": [
+        {
+          "address": "123 fake street",
+          "suburb": "Springfield",
+          "country": "USA",
+          "rating": 5
         }
+      ]
+    },
+    {
+      "firstName": "Jane",
+      "lastName": "Doe",
+      "profileImage": null,
+      "premiumUser": true,
+      "favouriteProperties": [
+        {
+          "address": "456 second avenue",
+          "suburb": "Columbus",
+          "state": "OH",
+          "country": "USA",
+          "rating": 4
+        }
+      ]
     }
+  ]
 }
 ```
 To a matching TypeScript type:
 ```typescript
 export type JsonData = {
-  glossary: {
-    title: string;
-    GlossDiv: {
-      title: string;
-      GlossList: {
-        GlossEntry: {
-          ID: string;
-          SortAs: string;
-          GlossTerm: string;
-          Acronym: string;
-          Abbrev: string;
-          GlossDef: {
-            para: string;
-            GlossSeeAlso: string[];
-          };
-          GlossSee: string;
-        };
-      };
+    pagination: {
+        results: number;
+        limit: number;
+        skipped: number;
     };
-  };
+    users: Array<{
+        firstName: string;
+        lastName: string;
+        profileImage: null | string;
+        recentLogins?: number[];
+        premiumUser: boolean;
+        favouriteProperties: Array<{
+            address: string;
+            suburb: string;
+            country: string;
+            rating: number;
+            state?: string;
+        }>;
+    }>;
 };
 ```
+
+Performance
+-----
+Designed to be highly performant with a small memory footprint.
+
+Can convert ~135,000 files per second.
 
 Building
 ---
