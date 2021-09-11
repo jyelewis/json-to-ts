@@ -3,4 +3,4 @@ project(json_to_ts C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(json_to_ts main.c types.h types.c merge_types.c merge_types.h io.c io.h print_type_as_ts.c print_type_as_ts.h json_to_type.c json_to_type.h)
+add_executable(json_to_ts src/main.c src/types.h src/types.c src/merge_types.c src/merge_types.h src/io.c src/io.h src/print_type_as_ts.c src/print_type_as_ts.h src/json_to_type.c src/json_to_type.h)
