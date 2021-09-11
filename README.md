@@ -1,4 +1,4 @@
-JSON TO TypeScript
+JSON to TypeScript
 ====
 
 Just a little hack project to keep my C skills sharp.
@@ -86,6 +86,8 @@ Building
 ---
 [Use CMake to build](https://cmake.org/cmake/help/latest/guide/tutorial/index.html)
 
+For convenience, a `build.sh` is present in the repository to configure & build a binary from source.
+
 Usage
 ----
 Once compiled, the binary will take JSON via stdin, and provide typescript vis stdout.
@@ -100,4 +102,4 @@ Tests are implemented in JavaScript.
 
 *The application must be built before tests can run*
 
-To run, cd to 'tests' then run 'yarn install && yarn test' to run all tests
+Run `./test.sh` to build & execute all tests
