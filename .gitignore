@@ -15,3 +15,6 @@ tests/node_modules/
 
 # ides
 .idea/
+
+# private
+publish.sh
